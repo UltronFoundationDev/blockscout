@@ -324,6 +324,13 @@ defmodule BlockScoutWeb.AddressView do
 
   def from_address_hash(_address), do: nil
 
+  def system_address?(%Hash{} = hash) do
+    string_hash = to_string(hash)
+    system_address?(string_hash)
+  end
+  def system_address?("0xfc00face00000000000000000000000000000000"), do: true
+  def system_address?(_address), do: false
+
   def address_link_to_other_explorer(link, address, full) do
     if full do
       link <> to_string(address)

@@ -305,6 +305,9 @@ defmodule Explorer.SmartContract.Solidity.Verifier do
     end
   end
 
+  def system_address?("0xfc00face00000000000000000000000000000000"), do: true
+  def system_address?(_address), do: false
+
   defp compare_bytecodes({:error, :name}, _, _, _), do: {:error, :name}
   defp compare_bytecodes({:error, _}, _, _, _), do: {:error, :compilation}
 
@@ -349,6 +352,18 @@ defmodule Explorer.SmartContract.Solidity.Verifier do
         _ ->
           ""
       end
+    #in ["0xfc00face00000000000000000000000000000000"]
+    bc_creation_tx_input = if bc_creation_tx_input == "" && system_address?(address_hash) do
+      bytecode
+    else
+      bc_creation_tx_input
+    end
+
+    bc_deployed_bytecode = if system_address?(address_hash) do
+      deployed_bytecode
+    else
+      bc_deployed_bytecode
+    end
 
     %{
       "metadata_hash_with_length" => bc_meta,
