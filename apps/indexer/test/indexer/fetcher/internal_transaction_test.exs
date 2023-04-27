@@ -242,7 +242,7 @@ defmodule Indexer.Fetcher.InternalTransactionTest do
 
           EthereumJSONRPC.Geth ->
             EthereumJSONRPC.Mox
-            |> expect(:json_rpc, fn [%{id: id, method: "debug_traceTransaction"}], _options ->
+            |> expect(:json_rpc, fn [%{id: id, method: "trace_transaction"}], _options ->
               {:ok,
                [
                  %{
@@ -409,7 +409,7 @@ defmodule Indexer.Fetcher.InternalTransactionTest do
 
           EthereumJSONRPC.Geth ->
             EthereumJSONRPC.Mox
-            |> expect(:json_rpc, fn [%{id: id, method: "debug_traceTransaction"}], _options ->
+            |> expect(:json_rpc, fn [%{id: id, method: "trace_transaction"}], _options ->
               {:ok,
                [
                  %{

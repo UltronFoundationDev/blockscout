@@ -17,7 +17,7 @@
 
 ### Chore
 
-- [#7297](https://github.com/blockscout/blockscout/pull/7297) - Use tracing JSONRPC URL in case of debug_traceTransaction method
+- [#7297](https://github.com/blockscout/blockscout/pull/7297) - Use tracing JSONRPC URL in case of trace_transaction method
 - [#7292](https://github.com/blockscout/blockscout/pull/7292) - Allow Node 16+ version
 
 <details>
@@ -828,7 +828,7 @@
 ### Features
 
 - [#5515](https://github.com/blockscout/blockscout/pull/5515) - Integrate ace editor to display contract sources
-- [#5505](https://github.com/blockscout/blockscout/pull/5505) - Manage debug_traceTransaction JSON RPC method timeout
+- [#5505](https://github.com/blockscout/blockscout/pull/5505) - Manage trace_transaction JSON RPC method timeout
 - [#5491](https://github.com/blockscout/blockscout/pull/5491) - Sequential blocks broadcast on the main page
 - [#5312](https://github.com/blockscout/blockscout/pull/5312) - Add OpenZeppelin proxy storage slot
 - [#5302](https://github.com/blockscout/blockscout/pull/5302) - Add specific tx receipt fields for the GoQuorum client

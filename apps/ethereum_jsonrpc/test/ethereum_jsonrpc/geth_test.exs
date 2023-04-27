@@ -8,7 +8,7 @@ defmodule EthereumJSONRPC.GethTest do
   @moduletag :no_nethermind
 
   describe "fetch_internal_transactions/2" do
-    # Infura Mainnet does not support debug_traceTransaction, so this cannot be tested expect in Mox
+    # Infura Mainnet does not support trace_transaction, so this cannot be tested expect in Mox
     setup do
       EthereumJSONRPC.Case.Geth.Mox.setup()
       initial_env = Application.get_all_env(:ethereum_jsonrpc)
@@ -22,7 +22,7 @@ defmodule EthereumJSONRPC.GethTest do
       block_number = 3_287_375
       transaction_index = 13
       transaction_hash = "0x32b17f27ddb546eab3c4c33f31eb22c1cb992d4ccc50dae26922805b717efe5c"
-      tracer = File.read!("priv/js/ethereum_jsonrpc/geth/debug_traceTransaction/tracer.js")
+      tracer = File.read!("priv/js/ethereum_jsonrpc/geth/trace_transaction/tracer.js")
 
       expect(EthereumJSONRPC.Mox, :json_rpc, fn [%{id: id, params: [^transaction_hash, %{tracer: ^tracer}]}], _ ->
         {:ok,
@@ -93,7 +93,7 @@ defmodule EthereumJSONRPC.GethTest do
         hash_data: transaction_hash
       }
 
-      tracer = File.read!("priv/js/ethereum_jsonrpc/geth/debug_traceTransaction/tracer.js")
+      tracer = File.read!("priv/js/ethereum_jsonrpc/geth/trace_transaction/tracer.js")
 
       expect(EthereumJSONRPC.Mox, :json_rpc, 1, fn
         [%{id: id, params: [^transaction_hash, %{tracer: "callTracer"}]}], _ ->
@@ -378,7 +378,7 @@ defmodule EthereumJSONRPC.GethTest do
         hash_data: transaction_hash
       }
 
-      tracer = File.read!("priv/js/ethereum_jsonrpc/geth/debug_traceTransaction/tracer.js")
+      tracer = File.read!("priv/js/ethereum_jsonrpc/geth/trace_transaction/tracer.js")
 
       expect(EthereumJSONRPC.Mox, :json_rpc, 1, fn
         [%{id: id, params: [^transaction_hash, %{tracer: "callTracer"}]}], _ ->
