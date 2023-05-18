@@ -148,7 +148,7 @@ config :ethereum_jsonrpc,
   disable_archive_balances?: ConfigHelper.parse_bool_env_var("ETHEREUM_JSONRPC_DISABLE_ARCHIVE_BALANCES")
 
 config :ethereum_jsonrpc, EthereumJSONRPC.Geth,
-  debug_trace_transaction_timeout: System.get_env("ETHEREUM_JSONRPC_DEBUG_TRACE_TRANSACTION_TIMEOUT", "5s"),
+  trace_transaction_timeout: System.get_env("ETHEREUM_JSONRPC_trace_transaction_TIMEOUT", "5s"),
   tracer: System.get_env("INDEXER_INTERNAL_TRANSACTIONS_TRACER_TYPE", "call_tracer")
 
 config :ethereum_jsonrpc, EthereumJSONRPC.PendingTransaction,

@@ -95,7 +95,7 @@ blockscout:
       _default: 'true'
     APPS:
       _default: '[{"title": "Marketplace", "url": "/apps", "embedded?": true}]'
-    ETHEREUM_JSONRPC_DEBUG_TRACE_TRANSACTION_TIMEOUT:
+    ETHEREUM_JSONRPC_trace_transaction_TIMEOUT:
       _default: '20s'
     ETHEREUM_JSONRPC_HTTP_TIMEOUT:
       _default: 60

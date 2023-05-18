@@ -31,9 +31,9 @@ defmodule EthereumJSONRPC.Geth do
 
     with {:ok, responses} <-
            id_to_params
-           |> debug_trace_transaction_requests()
+           |> trace_transaction_requests()
            |> json_rpc(json_rpc_named_arguments_corrected_timeout) do
-      debug_trace_transaction_responses_to_internal_transactions_params(
+      trace_transaction_responses_to_internal_transactions_params(
         responses,
         id_to_params,
         json_rpc_named_arguments
@@ -42,10 +42,10 @@ defmodule EthereumJSONRPC.Geth do
   end
 
   defp correct_timeouts(json_rpc_named_arguments) do
-    debug_trace_transaction_timeout =
-      Application.get_env(:ethereum_jsonrpc, __MODULE__)[:debug_trace_transaction_timeout]
+    trace_transaction_timeout =
+      Application.get_env(:ethereum_jsonrpc, __MODULE__)[:trace_transaction_timeout]
 
-    case CommonHelper.parse_duration(debug_trace_transaction_timeout) do
+    case CommonHelper.parse_duration(trace_transaction_timeout) do
       {:error, :invalid_format} ->
         json_rpc_named_arguments
 
@@ -78,9 +78,9 @@ defmodule EthereumJSONRPC.Geth do
     PendingTransaction.fetch_pending_transactions_geth(json_rpc_named_arguments)
   end
 
-  defp debug_trace_transaction_requests(id_to_params) when is_map(id_to_params) do
+  defp trace_transaction_requests(id_to_params) when is_map(id_to_params) do
     Enum.map(id_to_params, fn {id, %{hash_data: hash_data}} ->
-      debug_trace_transaction_request(%{id: id, hash_data: hash_data})
+      trace_transaction_request(%{id: id, hash_data: hash_data})
     end)
   end
 
@@ -88,9 +88,9 @@ defmodule EthereumJSONRPC.Geth do
   @external_resource @tracer_path
   @tracer File.read!(@tracer_path)
 
-  defp debug_trace_transaction_request(%{id: id, hash_data: hash_data}) do
-    debug_trace_transaction_timeout =
-      Application.get_env(:ethereum_jsonrpc, __MODULE__)[:debug_trace_transaction_timeout]
+  defp trace_transaction_request(%{id: id, hash_data: hash_data}) do
+    trace_transaction_timeout =
+      Application.get_env(:ethereum_jsonrpc, __MODULE__)[:trace_transaction_timeout]
 
     tracer =
       case Application.get_env(:ethereum_jsonrpc, __MODULE__)[:tracer] do
@@ -101,11 +101,11 @@ defmodule EthereumJSONRPC.Geth do
     request(%{
       id: id,
       method: "trace_transaction",
-      params: [hash_data, %{tracer: tracer, timeout: debug_trace_transaction_timeout}]
+      params: [hash_data, %{tracer: tracer, timeout: trace_transaction_timeout}]
     })
   end
 
-  defp debug_trace_transaction_responses_to_internal_transactions_params(
+  defp trace_transaction_responses_to_internal_transactions_params(
          [%{result: %{"structLogs" => _}} | _] = responses,
          id_to_params,
          json_rpc_named_arguments
@@ -128,7 +128,7 @@ defmodule EthereumJSONRPC.Geth do
 
       responses
       |> Enum.map(fn %{id: id, result: %{"structLogs" => _} = result} ->
-        debug_trace_transaction_response_to_internal_transactions_params(
+        trace_transaction_response_to_internal_transactions_params(
           %{id: id, result: Tracer.replay(result, Map.fetch!(receipts_map, id), Map.fetch!(txs_map, id))},
           id_to_params
         )
@@ -138,14 +138,14 @@ defmodule EthereumJSONRPC.Geth do
     end
   end
 
-  defp debug_trace_transaction_responses_to_internal_transactions_params(
+  defp trace_transaction_responses_to_internal_transactions_params(
          responses,
          id_to_params,
          _json_rpc_named_arguments
        )
        when is_list(responses) and is_map(id_to_params) do
     responses
-    |> Enum.map(&debug_trace_transaction_response_to_internal_transactions_params(&1, id_to_params))
+    |> Enum.map(&trace_transaction_response_to_internal_transactions_params(&1, id_to_params))
     |> reduce_internal_transactions_params()
   end
 
@@ -187,7 +187,7 @@ defmodule EthereumJSONRPC.Geth do
 
   defp fetch_missing_data(result, _json_rpc_named_arguments), do: result
 
-  defp debug_trace_transaction_response_to_internal_transactions_params(%{id: id, result: calls}, id_to_params)
+  defp trace_transaction_response_to_internal_transactions_params(%{id: id, result: calls}, id_to_params)
        when is_map(id_to_params) do
     %{block_number: block_number, hash_data: transaction_hash, transaction_index: transaction_index} =
       Map.fetch!(id_to_params, id)
@@ -209,7 +209,7 @@ defmodule EthereumJSONRPC.Geth do
     {:ok, internal_transaction_params}
   end
 
-  defp debug_trace_transaction_response_to_internal_transactions_params(%{id: id, error: error}, id_to_params)
+  defp trace_transaction_response_to_internal_transactions_params(%{id: id, error: error}, id_to_params)
        when is_map(id_to_params) do
     %{
       block_number: block_number,
