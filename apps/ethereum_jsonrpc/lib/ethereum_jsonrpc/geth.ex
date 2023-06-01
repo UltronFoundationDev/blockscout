@@ -39,6 +39,11 @@ defmodule EthereumJSONRPC.Geth do
         json_rpc_named_arguments
       )
     end
+
+    #id_to_params |> trace_transaction_requests()
+    # id_to_params
+    # %{0 => "0x5a3504a9d828055a69f17ab366801d0cb97544efc8439a04fd7e5ef1bc5660b1"}
+    #id_to_params |> trace_transaction_requests()
   end
 
   defp correct_timeouts(json_rpc_named_arguments) do
@@ -79,7 +84,8 @@ defmodule EthereumJSONRPC.Geth do
   end
 
   defp trace_transaction_requests(id_to_params) when is_map(id_to_params) do
-    Enum.map(id_to_params, fn {id, %{hash_data: hash_data}} ->
+    # Enum.map(id_to_params, fn {id, %{hash_data: hash_data}} ->
+    Enum.map(id_to_params, fn {id, hash_data} ->
       trace_transaction_request(%{id: id, hash_data: hash_data})
     end)
   end
