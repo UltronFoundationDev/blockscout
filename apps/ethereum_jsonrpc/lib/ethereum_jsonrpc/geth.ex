@@ -79,7 +79,8 @@ defmodule EthereumJSONRPC.Geth do
   end
 
   defp trace_transaction_requests(id_to_params) when is_map(id_to_params) do
-    Enum.map(id_to_params, fn {id, %{hash_data: hash_data}} ->
+    #Enum.map(id_to_params, fn {id, %{hash_data: hash_data}} ->
+    Enum.map(id_to_params, fn {id, hash_data} ->
       trace_transaction_request(%{id: id, hash_data: hash_data})
     end)
   end
